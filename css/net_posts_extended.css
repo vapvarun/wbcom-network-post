@@ -233,6 +233,15 @@ span.icon {
 }
 
 /* Elementor Network Posts */
+.elementor-widget-network_posts_widget .netsposts-items {
+    display: grid;
+    width: 100%;
+}
+
+.elementor-widget-network_posts_widget .netsposts-items.elementor-posts-masonry {
+    display: block;
+}
+
 .elementor-widget-network_posts_widget .netsposts-excerpt {
     font-family: inherit;
     line-height: inherit;
@@ -259,6 +268,13 @@ span.icon {
 .elementor-widget-network_posts_widget .elementor-posts-container .netsposts-content {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.elementor-widget-network_posts_widget .elementor-posts-masonry .netsposts-content {
+    width: auto;
+    position: relative;
 }
 
 .elementor-widget-network_posts_widget .elementor-posts-container .elementor-post__thumbnail {
@@ -391,4 +407,45 @@ span.icon {
 
 .widget.network_posts_wpmu .netsposts-content .netsposts-excerpt p {
     margin: 0;
+}
+
+/* Masonry Layout Fixes */
+.elementor-widget-network_posts_widget .elementor-posts-masonry {
+    position: relative;
+    overflow: visible;
+}
+
+.elementor-widget-network_posts_widget .elementor-posts-masonry .netsposts-content {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.elementor-widget-network_posts_widget .netsposts-block-wrapper {
+    width: 100%;
+    overflow: visible;
+}
+
+/* Ensure grid container doesn't overflow */
+.elementor-widget-network_posts_widget .elementor-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns, 3), 1fr);
+    gap: var(--grid-column-gap, 30px) var(--grid-row-gap, 35px);
+}
+
+/* Override grid for masonry */
+.elementor-widget-network_posts_widget .elementor-grid.elementor-posts-masonry {
+    display: block;
+}
+
+/* Responsive grid columns */
+@media (max-width: 1024px) {
+    .elementor-widget-network_posts_widget .elementor-grid:not(.elementor-posts-masonry) {
+        grid-template-columns: repeat(var(--grid-columns-tablet, 2), 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .elementor-widget-network_posts_widget .elementor-grid:not(.elementor-posts-masonry) {
+        grid-template-columns: repeat(var(--grid-columns-mobile, 1), 1fr);
+    }
 }

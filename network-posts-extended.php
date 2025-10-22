@@ -11,7 +11,7 @@ Text Domain: wbcom-network-posts
 Domain Path: /language
 */
 
-if ( realpath( __FILE__ ) == realpath( $_SERVER['SCRIPT_FILENAME'] ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Please don\'t access this file directly.' );
 }
 define( 'NETSPOSTS_MAIN_PLUGIN_FILE', __FILE__ );
@@ -44,10 +44,18 @@ function network_posts_categories_registered( $elements_manager ) {
 	}
 
 	add_action( 'elementor/elements/categories_registered', 'network_posts_categories_registered' );
+
+/**
+ * Register Network Posts widgets with Elementor.
+ *
+ * Load and register the Network Posts Elementor widget.
+ *
+ * @since 1.0.0
+ */
 function netword_posts_widgets_registered() {
 	require_once netsposts_path( 'network-posts-element.php' );
 }
-add_action( 'elementor/widgets/widgets_registered', 'netword_posts_widgets_registered', 15 );
+add_action( 'elementor/widgets/register', 'netword_posts_widgets_registered', 15 );
 
 require_once netsposts_path( 'network-posts-widget.php' );
 
@@ -77,7 +85,8 @@ function netsposts_shortcode( $atts ) {
 
 
 
-	if ( ! empty( $_GET ) ) {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	if ( ! empty( $_GET ) && is_array( $_GET ) ) {
 		$shortcode_mgr->add_attributes( $_GET );
 	}
 

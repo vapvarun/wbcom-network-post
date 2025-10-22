@@ -33,45 +33,170 @@ class Network_Posts_Widget extends Widget_Base {
 	public function __construct( $data = array(), $args = null ) {
 		parent::__construct( $data, $args );
 
-		wp_register_script( 'masonry-js', plugins_url( 'dist/masonry.min.js', __FILE__ ), array(), '1.0.2', true );
+		$script_path = plugin_dir_path( __FILE__ ) . 'dist/network-posts-elementor-handler.js';
+		$style_path  = plugin_dir_path( __FILE__ ) . 'css/widget-posts.min.css';
+
+		wp_register_script(
+			'network-posts-elementor-handler',
+			plugins_url( 'dist/network-posts-elementor-handler.js', __FILE__ ),
+			array( 'jquery', 'elementor-frontend' ),
+			file_exists( $script_path ) ? filemtime( $script_path ) : '1.0.2',
+			true
+		);
+		wp_register_style(
+			'network-posts-widget',
+			plugins_url( 'css/widget-posts.min.css', __FILE__ ),
+			array(),
+			file_exists( $style_path ) ? filemtime( $style_path ) : '1.0.0'
+		);
 	}
+
 	/**
-	 * Get dependent styles.
+	 * Get script dependencies.
+	 *
+	 * Retrieve the list of script dependencies the widget requires.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return array Widget script dependencies.
 	 */
 	public function get_script_depends() {
-		return array( 'masonry-js' );
+		return array( 'network-posts-elementor-handler' );
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends() {
+		return array( 'network-posts-widget' );
+	}
+
+	/**
+	 * Get widget keywords.
+	 *
+	 * Retrieve the list of keywords the widget belongs to.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return array Widget keywords.
+	 */
+	public function get_keywords() {
+		return array( 'network', 'posts', 'multisite', 'global posts', 'blog posts', 'network posts' );
+	}
+
+	/**
+	 * Get custom help URL.
+	 *
+	 * Retrieve a URL where the user can get more information about the widget.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return string Widget help URL.
+	 */
+	public function get_custom_help_url() {
+		return 'https://agaveplugins.com/tutorials/plugins/multisite/network-posts-extended/';
+	}
+
+	/**
+	 * Check if this widget has dynamic content.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 * @return bool Whether the widget has dynamic content.
+	 */
+	protected function is_dynamic_content() {
+		return true;
+	}
+
+	/**
+	 * Whether the widget has a custom inner wrapper.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return bool Whether the widget has inner wrapper.
+	 */
+	public function has_widget_inner_wrapper() {
+		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
 	}
 
 
-
+	/**
+	 * Get widget name.
+	 *
+	 * Retrieve network posts widget name.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return string Widget name.
+	 */
 	public function get_name() {
 		return 'network_posts_widget';
 	}
 
+	/**
+	 * Get widget title.
+	 *
+	 * Retrieve network posts widget title.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return string Widget title.
+	 */
 	public function get_title() {
 		return esc_html__('Network Posts', 'network-posts-extended' );
 	}
 
+	/**
+	 * Get widget icon.
+	 *
+	 * Retrieve network posts widget icon.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return string Widget icon.
+	 */
 	public function get_icon() {
 		return 'eicon-post-list';
 	}
 
+	/**
+	 * Get widget categories.
+	 *
+	 * Retrieve the list of categories the network posts widget belongs to.
+	 *
+	 * @since 1.0.0
+	 * @access public
+	 * @return array Widget categories.
+	 */
 	public function get_categories() {
 		return [ 'network-posts-widgets' ];
 	}
 
-	
+	/**
+	 * Register network posts widget controls.
+	 *
+	 * Adds different input fields to allow the user to change and customize the widget settings.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'section_layout',
 			[
-				'label' => esc_html__( 'Layout', 'elementor-pro' ),
+				'label' => esc_html__( 'Layout', 'network-posts-extended' ),
 			]
 		);
 		$this->add_responsive_control(
 			'columns',
 			[
-				'label' => esc_html__( 'Columns', 'elementor-pro' ),
+				'label' => esc_html__( 'Columns', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '3',
 				'tablet_default' => '2',
@@ -93,7 +218,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			[
-				'label' => esc_html__( 'Posts Per Page', 'elementor-pro' ),
+				'label' => esc_html__( 'Posts Per Page', 'network-posts-extended' ),
 				'type' => Controls_Manager::NUMBER,
 				'default' => 20,
 			]
@@ -102,10 +227,10 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'masonry',
 			[
-				'label' => esc_html__( 'Masonry', 'elementor-pro' ),
+				'label' => esc_html__( 'Masonry', 'network-posts-extended' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_off' => esc_html__( 'Off', 'elementor-pro' ),
-				'label_on' => esc_html__( 'On', 'elementor-pro' ),
+				'label_off' => esc_html__( 'Off', 'network-posts-extended' ),
+				'label_on' => esc_html__( 'On', 'network-posts-extended' ),
 				'condition' => [
 					'columns!' => '1',
 					
@@ -118,10 +243,10 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'show_image',
 			[
-				'label' => esc_html__( 'Image', 'elementor-pro' ),
+				'label' => esc_html__( 'Image', 'network-posts-extended' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'Show', 'elementor-pro' ),
-				'label_off' => esc_html__( 'Hide', 'elementor-pro' ),
+				'label_on' => esc_html__( 'Show', 'network-posts-extended' ),
+				'label_off' => esc_html__( 'Hide', 'network-posts-extended' ),
 				'default' => 'yes',
 			]
 		);
@@ -142,7 +267,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'item_ratio',
 			[
-				'label' => esc_html__( 'Image Ratio', 'elementor-pro' ),
+				'label' => esc_html__( 'Image Ratio', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 0.66,
@@ -173,7 +298,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'image_width',
 			[
-				'label' => esc_html__( 'Image Width', 'elementor-pro' ),
+				'label' => esc_html__( 'Image Width', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'%' => [
@@ -210,7 +335,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label' => esc_html__( 'Title HTML Tag', 'elementor-pro' ),
+				'label' => esc_html__( 'Title HTML Tag', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -230,10 +355,10 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'show_excerpt',
 			[
-				'label' => esc_html__( 'Excerpt', 'elementor-pro' ),
+				'label' => esc_html__( 'Excerpt', 'network-posts-extended' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'Show', 'elementor-pro' ),
-				'label_off' => esc_html__( 'Hide', 'elementor-pro' ),
+				'label_on' => esc_html__( 'Show', 'network-posts-extended' ),
+				'label_off' => esc_html__( 'Hide', 'network-posts-extended' ),
 				'default' => 'yes',
 			]
 		);
@@ -241,7 +366,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'excerpt_length',
 			[
-				'label' => esc_html__( 'Excerpt Length', 'elementor-pro' ),
+				'label' => esc_html__( 'Excerpt Length', 'network-posts-extended' ),
 				'type' => Controls_Manager::NUMBER,
 				/** This filter is documented in wp-includes/formatting.php */
 				'default' => apply_filters( 'excerpt_length', 25 ),
@@ -254,10 +379,10 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'show_read_more',
 			[
-				'label' => esc_html__( 'Read More', 'elementor-pro' ),
+				'label' => esc_html__( 'Read More', 'network-posts-extended' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'Show', 'elementor-pro' ),
-				'label_off' => esc_html__( 'Hide', 'elementor-pro' ),
+				'label_on' => esc_html__( 'Show', 'network-posts-extended' ),
+				'label_off' => esc_html__( 'Hide', 'network-posts-extended' ),
 				'default' => 'yes',
 				'separator' => 'before',
 			]
@@ -266,12 +391,12 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'read_more_text',
 			[
-				'label' => esc_html__( 'Read More Text', 'elementor-pro' ),
+				'label' => esc_html__( 'Read More Text', 'network-posts-extended' ),
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => esc_html__( 'Read More »', 'elementor-pro' ),
+				'default' => esc_html__( 'Read More »', 'network-posts-extended' ),
 				'condition' => [
 					'show_read_more' => 'yes',
 				],
@@ -281,10 +406,10 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'open_new_tab',
 			[
-				'label' => esc_html__( 'Open in new window', 'elementor-pro' ),
+				'label' => esc_html__( 'Open in new window', 'network-posts-extended' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'Yes', 'elementor-pro' ),
-				'label_off' => esc_html__( 'No', 'elementor-pro' ),
+				'label_on' => esc_html__( 'Yes', 'network-posts-extended' ),
+				'label_off' => esc_html__( 'No', 'network-posts-extended' ),
 				'default' => 'no',
 				'render_type' => 'none',
 				'condition' => [
@@ -298,7 +423,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_query',
 			[
-				'label' => esc_html__( 'Query', 'elementor-pro' ),
+				'label' => esc_html__( 'Query', 'network-posts-extended' ),
 			]
 		);		
 		
@@ -322,7 +447,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'include_blog',
 			[
-				'label' => esc_html__( 'Include Blog', 'elementor-pro' ),
+				'label' => esc_html__( 'Include Blog', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT2,
 				'multiple' => true,
 				'options' => $blogs_info,				
@@ -344,7 +469,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'exclude_blog',
 			[
-				'label' => esc_html__( 'Exclude Blog', 'elementor-pro' ),
+				'label' => esc_html__( 'Exclude Blog', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT2,
 				'multiple' => true,
 				'options' => $blogs_info,				
@@ -360,13 +485,13 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'orderby',
 			[
-				'label' => esc_html__( 'Order By', 'elementor-pro' ),
+				'label' => esc_html__( 'Order By', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'date',
 				'options' => [
-					'date' => esc_html__( 'Date', 'elementor-pro' ),
-					'title' => esc_html__( 'Title', 'elementor-pro' ),					
-					'rand' => esc_html__( 'Random', 'elementor-pro' ),					
+					'date' => esc_html__( 'Date', 'network-posts-extended' ),
+					'title' => esc_html__( 'Title', 'network-posts-extended' ),					
+					'rand' => esc_html__( 'Random', 'network-posts-extended' ),					
 				],
 			]
 		);
@@ -374,12 +499,12 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'order',
 			[
-				'label' => esc_html__( 'Order', 'elementor-pro' ),
+				'label' => esc_html__( 'Order', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'desc',
 				'options' => [
-					'asc' => esc_html__( 'ASC', 'elementor-pro' ),
-					'desc' => esc_html__( 'DESC', 'elementor-pro' ),
+					'asc' => esc_html__( 'ASC', 'network-posts-extended' ),
+					'desc' => esc_html__( 'DESC', 'network-posts-extended' ),
 				],
 			]
 		);
@@ -390,19 +515,19 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_pagination',
 			[
-				'label' => esc_html__( 'Pagination', 'elementor-pro' ),
+				'label' => esc_html__( 'Pagination', 'network-posts-extended' ),
 			]
 		);
 		
 		$this->add_control(
 			'pagination_type',
 			[
-				'label' => esc_html__( 'Pagination', 'elementor-pro' ),
+				'label' => esc_html__( 'Pagination', 'network-posts-extended' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '',
-				'options' => [	'' => esc_html__( 'None', 'elementor-pro' ),
-								'numbers' => esc_html__( 'Numbers', 'elementor-pro' ),								
-								'numbers_and_prev_next' => esc_html__( 'Numbers', 'elementor-pro' ) . ' + ' . esc_html__( 'Previous/Next', 'elementor-pro' ),
+				'options' => [	'' => esc_html__( 'None', 'network-posts-extended' ),
+								'numbers' => esc_html__( 'Numbers', 'network-posts-extended' ),								
+								'numbers_and_prev_next' => esc_html__( 'Numbers', 'network-posts-extended' ) . ' + ' . esc_html__( 'Previous/Next', 'network-posts-extended' ),
 								
 							],
 				'frontend_available' => true,
@@ -412,11 +537,11 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'pagination_prev_label',
 			[
-				'label' => esc_html__( 'Previous Label', 'elementor-pro' ),
+				'label' => esc_html__( 'Previous Label', 'network-posts-extended' ),
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => esc_html__( '&laquo; Previous', 'elementor-pro' ),
+				'default' => esc_html__( '&laquo; Previous', 'network-posts-extended' ),
 				'condition' => [
 					'pagination_type' => [
 						'prev_next',
@@ -429,8 +554,8 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'pagination_next_label',
 			[
-				'label' => esc_html__( 'Next Label', 'elementor-pro' ),
-				'default' => esc_html__( 'Next &raquo;', 'elementor-pro' ),
+				'label' => esc_html__( 'Next Label', 'network-posts-extended' ),
+				'default' => esc_html__( 'Next &raquo;', 'network-posts-extended' ),
 				'condition' => [
 					'pagination_type' => [
 						'prev_next',
@@ -447,19 +572,19 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'pagination_align',
 			[
-				'label' => esc_html__( 'Alignment', 'elementor-pro' ),
+				'label' => esc_html__( 'Alignment', 'network-posts-extended' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => esc_html__( 'Left', 'elementor-pro' ),
+						'title' => esc_html__( 'Left', 'network-posts-extended' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => esc_html__( 'Center', 'elementor-pro' ),
+						'title' => esc_html__( 'Center', 'network-posts-extended' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => esc_html__( 'Right', 'elementor-pro' ),
+						'title' => esc_html__( 'Right', 'network-posts-extended' ),
 						'icon' => 'eicon-text-align-right',
 					],
 				],
@@ -483,7 +608,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_design_layout',
 			[
-				'label' => esc_html__( 'Layout', 'elementor-pro' ),
+				'label' => esc_html__( 'Layout', 'network-posts-extended' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -491,7 +616,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'column_gap',
 			[
-				'label' => esc_html__( 'Columns Gap', 'elementor-pro' ),
+				'label' => esc_html__( 'Columns Gap', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 30,
@@ -511,7 +636,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'row_gap',
 			[
-				'label' => esc_html__( 'Rows Gap', 'elementor-pro' ),
+				'label' => esc_html__( 'Rows Gap', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 35,
@@ -532,19 +657,19 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'alignment',
 			[
-				'label' => esc_html__( 'Alignment', 'elementor-pro' ),
+				'label' => esc_html__( 'Alignment', 'network-posts-extended' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => esc_html__( 'Left', 'elementor-pro' ),
+						'title' => esc_html__( 'Left', 'network-posts-extended' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => esc_html__( 'Center', 'elementor-pro' ),
+						'title' => esc_html__( 'Center', 'network-posts-extended' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => esc_html__( 'Right', 'elementor-pro' ),
+						'title' => esc_html__( 'Right', 'network-posts-extended' ),
 						'icon' => 'eicon-text-align-right',
 					],
 				],
@@ -557,7 +682,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_design_box',
 			[
-				'label' => esc_html__( 'Box', 'elementor-pro' ),
+				'label' => esc_html__( 'Box', 'network-posts-extended' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -565,7 +690,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'box_border_width',
 			[
-				'label' => esc_html__( 'Border Width', 'elementor-pro' ),
+				'label' => esc_html__( 'Border Width', 'network-posts-extended' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'range' => [
@@ -583,7 +708,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'box_border_radius',
 			[
-				'label' => esc_html__( 'Border Radius', 'elementor-pro' ),
+				'label' => esc_html__( 'Border Radius', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range' => [
@@ -601,7 +726,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'box_padding',
 			[
-				'label' => esc_html__( 'Padding', 'elementor-pro' ),
+				'label' => esc_html__( 'Padding', 'network-posts-extended' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'range' => [
@@ -619,7 +744,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'content_padding',
 			[
-				'label' => esc_html__( 'Content Padding', 'elementor-pro' ),
+				'label' => esc_html__( 'Content Padding', 'network-posts-extended' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'range' => [
@@ -639,7 +764,7 @@ class Network_Posts_Widget extends Widget_Base {
 
 		$this->start_controls_tab( 'classic_style_normal',
 			[
-				'label' => esc_html__( 'Normal', 'elementor-pro' ),
+				'label' => esc_html__( 'Normal', 'network-posts-extended' ),
 			]
 		);
 
@@ -654,7 +779,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'box_bg_color',
 			[
-				'label' => esc_html__( 'Background Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Background Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .netsposts-content' => 'background-color: {{VALUE}}',
@@ -665,7 +790,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'box_border_color',
 			[
-				'label' => esc_html__( 'Border Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Border Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .netsposts-content' => 'border-color: {{VALUE}}',
@@ -677,7 +802,7 @@ class Network_Posts_Widget extends Widget_Base {
 
 		$this->start_controls_tab( 'classic_style_hover',
 			[
-				'label' => esc_html__( 'Hover', 'elementor-pro' ),
+				'label' => esc_html__( 'Hover', 'network-posts-extended' ),
 			]
 		);
 
@@ -692,7 +817,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'box_bg_color_hover',
 			[
-				'label' => esc_html__( 'Background Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Background Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .netsposts-content:hover' => 'background-color: {{VALUE}}',
@@ -703,7 +828,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'box_border_color_hover',
 			[
-				'label' => esc_html__( 'Border Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Border Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .netsposts-content:hover' => 'border-color: {{VALUE}}',
@@ -721,7 +846,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_design_image',
 			[
-				'label' => esc_html__( 'Image', 'elementor-pro' ),
+				'label' => esc_html__( 'Image', 'network-posts-extended' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_image' => 'yes',
@@ -732,7 +857,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'img_border_radius',
 			[
-				'label' => esc_html__( 'Border Radius', 'elementor-pro' ),
+				'label' => esc_html__( 'Border Radius', 'network-posts-extended' ),
 				'type' => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
@@ -747,7 +872,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'image_spacing',
 			[
-				'label' => esc_html__( 'Spacing', 'elementor-pro' ),
+				'label' => esc_html__( 'Spacing', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -770,7 +895,7 @@ class Network_Posts_Widget extends Widget_Base {
 
 		$this->start_controls_tab( 'normal',
 			[
-				'label' => esc_html__( 'Normal', 'elementor-pro' ),
+				'label' => esc_html__( 'Normal', 'network-posts-extended' ),
 			]
 		);
 
@@ -786,7 +911,7 @@ class Network_Posts_Widget extends Widget_Base {
 
 		$this->start_controls_tab( 'hover',
 			[
-				'label' => esc_html__( 'Hover', 'elementor-pro' ),
+				'label' => esc_html__( 'Hover', 'network-posts-extended' ),
 			]
 		);
 
@@ -808,7 +933,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_design_content',
 			[
-				'label' => esc_html__( 'Content', 'elementor-pro' ),
+				'label' => esc_html__( 'Content', 'network-posts-extended' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -816,7 +941,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_title_style',
 			[
-				'label' => esc_html__( 'Title', 'elementor-pro' ),
+				'label' => esc_html__( 'Title', 'network-posts-extended' ),
 				'type' => Controls_Manager::HEADING,				
 			]
 		);
@@ -824,7 +949,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'title_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'global' => [
 					'default' => Global_Colors::COLOR_SECONDARY,
@@ -857,7 +982,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_meta_style',
 			[
-				'label' => esc_html__( 'Meta', 'elementor-pro' ),
+				'label' => esc_html__( 'Meta', 'network-posts-extended' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',				
 			]
@@ -866,7 +991,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'meta_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .netsposts-source' => 'color: {{VALUE}};',
@@ -878,7 +1003,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'meta_separator_color',
 			[
-				'label' => esc_html__( 'Separator Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Separator Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .netsposts-source span:before' => 'color: {{VALUE}};',
@@ -901,7 +1026,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_excerpt_style',
 			[
-				'label' => esc_html__( 'Excerpt', 'elementor-pro' ),
+				'label' => esc_html__( 'Excerpt', 'network-posts-extended' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -913,7 +1038,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'excerpt_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-post__excerpt p, {{WRAPPER}} .elementor-post__excerpt' => 'color: {{VALUE}};',
@@ -943,7 +1068,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_readmore_style',
 			[
-				'label' => esc_html__( 'Read More', 'elementor-pro' ),
+				'label' => esc_html__( 'Read More', 'network-posts-extended' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -955,7 +1080,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'read_more_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'global' => [
 					'default' => Global_Colors::COLOR_ACCENT,
@@ -991,7 +1116,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_pagination_style',
 			[
-				'label' => esc_html__( 'Pagination', 'elementor-pro' ),
+				'label' => esc_html__( 'Pagination', 'network-posts-extended' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'pagination_type!' => [						
@@ -1015,7 +1140,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_control(
 			'pagination_color_heading',
 			[
-				'label' => esc_html__( 'Colors', 'elementor-pro' ),
+				'label' => esc_html__( 'Colors', 'network-posts-extended' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -1026,14 +1151,14 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_tab(
 			'pagination_color_normal',
 			[
-				'label' => esc_html__( 'Normal', 'elementor-pro' ),
+				'label' => esc_html__( 'Normal', 'network-posts-extended' ),
 			]
 		);
 
 		$this->add_control(
 			'pagination_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-pagination .page-numbers:not(.dots)' => 'color: {{VALUE}};',
@@ -1046,14 +1171,14 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_tab(
 			'pagination_color_hover',
 			[
-				'label' => esc_html__( 'Hover', 'elementor-pro' ),
+				'label' => esc_html__( 'Hover', 'network-posts-extended' ),
 			]
 		);
 
 		$this->add_control(
 			'pagination_hover_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-pagination a.page-numbers:hover' => 'color: {{VALUE}};',
@@ -1066,14 +1191,14 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->start_controls_tab(
 			'pagination_color_active',
 			[
-				'label' => esc_html__( 'Active', 'elementor-pro' ),
+				'label' => esc_html__( 'Active', 'network-posts-extended' ),
 			]
 		);
 
 		$this->add_control(
 			'pagination_active_color',
 			[
-				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'label' => esc_html__( 'Color', 'network-posts-extended' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-pagination .page-numbers.current' => 'color: {{VALUE}};',
@@ -1088,7 +1213,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'pagination_spacing',
 			[
-				'label' => esc_html__( 'Space Between', 'elementor-pro' ),
+				'label' => esc_html__( 'Space Between', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'separator' => 'before',
 				'default' => [
@@ -1112,7 +1237,7 @@ class Network_Posts_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'pagination_spacing_top',
 			[
-				'label' => esc_html__( 'Spacing', 'elementor-pro' ),
+				'label' => esc_html__( 'Spacing', 'network-posts-extended' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -1130,7 +1255,14 @@ class Network_Posts_Widget extends Widget_Base {
 
 	}
 
-	
+	/**
+	 * Render network posts widget output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 * @since 1.0.0
+	 * @access protected
+	 */
 	protected function render() {	
 		$settings = $this->get_settings_for_display();
 		
@@ -1221,12 +1353,17 @@ class Network_Posts_Widget extends Widget_Base {
 		foreach( $shortcode_atts as $atts_key=>$atts_value ){
 			$shortcode_atts_string .= ' ' . $atts_key. "='". $atts_value ."'";
 		}
-		?><link rel="stylesheet" href="<?php echo plugins_url( 'css/widget-posts.min.css', __FILE__ );?>"><?php
 		echo do_shortcode( "[netsposts {$shortcode_atts_string}]");
 		
 	}
 
 }
 
-
-\Elementor\Plugin::instance()->widgets_manager->register_widget_type( new Network_Posts_Widget() );
+/**
+ * Register Network Posts Widget.
+ *
+ * Register the widget with Elementor.
+ *
+ * @since 1.0.0
+ */
+\Elementor\Plugin::instance()->widgets_manager->register( new Network_Posts_Widget() );
