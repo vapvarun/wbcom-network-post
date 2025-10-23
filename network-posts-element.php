@@ -60,7 +60,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return array Widget script dependencies.
 	 */
-	public function get_script_depends() {
+	public function get_script_depends(): array {
 		return array( 'network-posts-elementor-handler' );
 	}
 
@@ -73,7 +73,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return array Widget style dependencies.
 	 */
-	public function get_style_depends() {
+	public function get_style_depends(): array {
 		return array( 'network-posts-widget' );
 	}
 
@@ -86,7 +86,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return array Widget keywords.
 	 */
-	public function get_keywords() {
+	public function get_keywords(): array {
 		return array( 'network', 'posts', 'multisite', 'global posts', 'blog posts', 'network posts' );
 	}
 
@@ -99,7 +99,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return string Widget help URL.
 	 */
-	public function get_custom_help_url() {
+	public function get_custom_help_url(): string {
 		return 'https://agaveplugins.com/tutorials/plugins/multisite/network-posts-extended/';
 	}
 
@@ -110,7 +110,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access protected
 	 * @return bool Whether the widget has dynamic content.
 	 */
-	protected function is_dynamic_content() {
+	protected function is_dynamic_content(): bool {
 		return true;
 	}
 
@@ -121,7 +121,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return bool Whether the widget has inner wrapper.
 	 */
-	public function has_widget_inner_wrapper() {
+	public function has_widget_inner_wrapper(): bool {
 		return ! \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
 	}
 
@@ -135,7 +135,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return string Widget name.
 	 */
-	public function get_name() {
+	public function get_name(): string {
 		return 'network_posts_widget';
 	}
 
@@ -148,7 +148,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return string Widget title.
 	 */
-	public function get_title() {
+	public function get_title(): string {
 		return esc_html__('Network Posts', 'network-posts-extended' );
 	}
 
@@ -161,7 +161,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return string Widget icon.
 	 */
-	public function get_icon() {
+	public function get_icon(): string {
 		return 'eicon-post-list';
 	}
 
@@ -174,7 +174,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @access public
 	 * @return array Widget categories.
 	 */
-	public function get_categories() {
+	public function get_categories(): array {
 		return [ 'network-posts-widgets' ];
 	}
 
@@ -186,7 +186,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function register_controls() {
+	protected function register_controls(): void {
 		$this->start_controls_section(
 			'section_layout',
 			[
@@ -286,7 +286,7 @@ class Network_Posts_Widget extends Widget_Base {
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .elementor-posts-container .elementor-post__thumbnail' => 'padding-bottom: calc( {{SIZE}} * 100% );',					
+					'{{WRAPPER}} .netsposts-items .elementor-post__thumbnail' => 'padding-bottom: calc( {{SIZE}} * 100% );',					
 				],	
 			'condition' => [
 					'show_image' => 'yes',	
@@ -528,6 +528,7 @@ class Network_Posts_Widget extends Widget_Base {
 				'options' => [	'' => esc_html__( 'None', 'network-posts-extended' ),
 								'numbers' => esc_html__( 'Numbers', 'network-posts-extended' ),								
 								'numbers_and_prev_next' => esc_html__( 'Numbers', 'network-posts-extended' ) . ' + ' . esc_html__( 'Previous/Next', 'network-posts-extended' ),
+								'load_more_on_click' => esc_html__( 'Load More', 'network-posts-extended' ),
 								
 							],
 				'frontend_available' => true,
@@ -568,6 +569,51 @@ class Network_Posts_Widget extends Widget_Base {
 			]
 		);
 		
+
+	$this->add_control(
+		'load_more_button_text',
+		[
+			'label' => esc_html__( 'Load More Text', 'network-posts-extended' ),
+			'type' => Controls_Manager::TEXT,
+			'default' => esc_html__( 'Load More', 'network-posts-extended' ),
+			'condition' => [
+				'pagination_type' => 'load_more_on_click',
+			],
+			'dynamic' => [
+				'active' => true,
+			],
+		]
+	);
+
+	$this->add_control(
+		'load_more_loading_text',
+		[
+			'label' => esc_html__( 'Loading Text', 'network-posts-extended' ),
+			'type' => Controls_Manager::TEXT,
+			'default' => esc_html__( 'Loading...', 'network-posts-extended' ),
+			'condition' => [
+				'pagination_type' => 'load_more_on_click',
+			],
+			'dynamic' => [
+				'active' => true,
+			],
+		]
+	);
+
+	$this->add_control(
+		'load_more_no_more_text',
+		[
+			'label' => esc_html__( 'No More Posts Text', 'network-posts-extended' ),
+			'type' => Controls_Manager::TEXT,
+			'default' => esc_html__( 'No More Posts', 'network-posts-extended' ),
+			'condition' => [
+				'pagination_type' => 'load_more_on_click',
+			],
+			'dynamic' => [
+				'active' => true,
+			],
+		]
+	);
 		
 		$this->add_control(
 			'pagination_align',
@@ -919,7 +965,7 @@ class Network_Posts_Widget extends Widget_Base {
 			Group_Control_Css_Filter::get_type(),
 			[
 				'name' => 'thumbnail_hover_filters',
-				'selector' => '{{WRAPPER}} .elementor-post:hover .elementor-post__thumbnail img',
+				'selector' => '{{WRAPPER}} .netsposts-content:hover .elementor-post__thumbnail img',
 			]
 		);
 
@@ -1263,7 +1309,7 @@ class Network_Posts_Widget extends Widget_Base {
 	 * @since 1.0.0
 	 * @access protected
 	 */
-	protected function render() {	
+	protected function render(): void {	
 		$settings = $this->get_settings_for_display();
 		
 		$shortcode_atts['post_type'] = 'post';		
@@ -1326,12 +1372,16 @@ class Network_Posts_Widget extends Widget_Base {
 		
 		/* Pagination Settings */
 		if ( isset($settings['pagination_type']) && $settings['pagination_type'] != '' ) {
-			$shortcode_atts['paginate'] 	= true;
-			$shortcode_atts['prev_next'] 	= false;
-			if ( $settings['pagination_type'] == 'numbers_and_prev_next' ) {
-				$shortcode_atts['prev_next'] 	= true;
-				$shortcode_atts['prev'] 		= $settings['pagination_prev_label'];
-				$shortcode_atts['next'] 		= $settings['pagination_next_label'];
+			if ( $settings['pagination_type'] == 'load_more_on_click' ) {
+				// Don't set paginate for Load More - JavaScript adds the button and handles AJAX
+			} else {
+				$shortcode_atts['paginate'] 	= true;
+				$shortcode_atts['prev_next'] 	= false;
+				if ( $settings['pagination_type'] == 'numbers_and_prev_next' ) {
+					$shortcode_atts['prev_next'] 	= true;
+					$shortcode_atts['prev'] 		= $settings['pagination_prev_label'];
+					$shortcode_atts['next'] 		= $settings['pagination_next_label'];
+				}
 			}
 		}
 		
@@ -1353,8 +1403,9 @@ class Network_Posts_Widget extends Widget_Base {
 		foreach( $shortcode_atts as $atts_key=>$atts_value ){
 			$shortcode_atts_string .= ' ' . $atts_key. "='". $atts_value ."'";
 		}
+
 		echo do_shortcode( "[netsposts {$shortcode_atts_string}]");
-		
+
 	}
 
 }
