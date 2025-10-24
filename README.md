@@ -5,7 +5,7 @@
 **Tags:** network global posts, network posts, global posts, multisite posts, shared posts, display multisite posts
 **Requires at least:** 5.7.1
 **Tested up to:** 6.2
-**Stable tag:** 1.0.0
+**Stable tag:** 2.0.0
 **Requires PHP:** 7.2+
 **Compatible with PHP:** 8.3+
 **License:** GPLv2 or later
@@ -284,6 +284,13 @@ Add a heading with link:
 
 ## Changelog
 
+### 2.0.0
+- Fixed Masonry layout not loading on frontend
+- Added fallback initialization for Elementor widgets
+- Added Grunt build system for distribution packages
+- Improved JavaScript loading and initialization
+- Enhanced build process with automated zip creation
+
 ### 1.0.0
 - Initial release
 - PHP 8.3+ compatibility
@@ -354,7 +361,7 @@ npm run clean
 
 The distribution zip file will be created in the `release/` folder with the naming format:
 ```
-release/wbcom-network-post-v1.0.0.zip
+release/wbcom-network-post-v2.0.0.zip
 ```
 
 #### What Gets Included

@@ -1,6 +1,6 @@
 {
   "name": "wbcom-network-post",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Network Posts Extended - Share posts throughout WordPress Multisite network",
   "main": "network-posts-extended.php",
   "scripts": {

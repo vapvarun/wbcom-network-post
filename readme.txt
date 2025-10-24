@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: network global posts, network posts, global posts, multisite posts, shared posts, display multisite posts
 Requires at least: 5.7.1
 Tested up to: 6.2
-Stable tag: 1.0.0
+Stable tag: 2.0.0
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -112,6 +112,22 @@ You do so with the following parameters. 1) main_title='List of Blogs About Bike
 4. Image resizing. You may set up custom image sizes and regenerate thumbnails.
 
 == Changelog ==
+
+== 2.0.0 ==
+* Fixed Masonry layout not loading on frontend
+* Added fallback initialization for Elementor widgets
+* Added Grunt build system for distribution packages
+* Improved JavaScript loading and initialization
+* Enhanced build process with automated zip creation
+
+== 1.0.0 ==
+* PHP 8.3+ compatibility
+* Modernized Elementor widget (compatible with Elementor 3.5+)
+* Fixed Masonry layout issues
+* Improved JavaScript performance
+* Enhanced security (removed eval() usage)
+* Added comprehensive error handling
+* Full WordPress Coding Standards compliance
 
 == 7.3.8 ==
 Initial Release

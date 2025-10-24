@@ -4,7 +4,7 @@
 Plugin Name: Wbcom Network Post
 Plugin URI: https://wordpress.org/plugins/network-posts-extended/
 Description: The Network Posts plugin allows you to share posts throughout the WordPress Multi Site network. This plugin will function as an Elementor widget as well as a standard WordPress widget. The posts chosen by taxonomy from any blog, including the main, can be displayed on any blog in your network. This feature would make the ideal listing plugin for WordPress Multisite Posts.
-Version: 1.0.0
+Version: 2.0.0
 Author: Wbcom Designs
 Author URI: https://wbcomdesigns.com/
 Text Domain: wbcom-network-posts
