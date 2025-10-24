@@ -1,0 +1,26 @@
+{
+  "name": "wbcom-network-post",
+  "version": "1.0.0",
+  "description": "Network Posts Extended - Share posts throughout WordPress Multisite network",
+  "main": "network-posts-extended.php",
+  "scripts": {
+    "build": "grunt build",
+    "zip": "grunt zip",
+    "clean": "grunt clean"
+  },
+  "keywords": [
+    "wordpress",
+    "multisite",
+    "network",
+    "posts",
+    "elementor"
+  ],
+  "author": "Wbcom Designs",
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "grunt": "^1.6.1",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-compress": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0"
+  }
+}

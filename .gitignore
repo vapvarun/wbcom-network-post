@@ -1,0 +1,30 @@
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build directories
+build/
+release/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Package lock (optional - uncomment if you want to ignore it)
+# package-lock.json

@@ -326,6 +326,49 @@ wbcom-network-post/
 └── language/           # Translation files
 ```
 
+### Build System
+
+This plugin uses **Grunt** to create distribution packages for release.
+
+#### Setup
+
+1. Install Node.js and npm (if not already installed)
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+#### Build Commands
+
+```bash
+# Create distribution zip file (default task)
+npm run zip
+
+# Build files only (without creating zip)
+npm run build
+
+# Clean build/release directories
+npm run clean
+```
+
+The distribution zip file will be created in the `release/` folder with the naming format:
+```
+release/wbcom-network-post-v1.0.0.zip
+```
+
+#### What Gets Included
+
+The build process automatically excludes development files:
+- ❌ `node_modules/`
+- ❌ `build/` and `release/` directories
+- ❌ `.git/` repository files
+- ❌ Build configuration files (`package.json`, `Gruntfile.js`)
+- ❌ IDE configuration files
+- ❌ Log files and temporary files
+
+All plugin files (PHP, JavaScript, CSS, images, translations) are included in the distribution package.
+
 ---
 
 ## Support & Documentation
