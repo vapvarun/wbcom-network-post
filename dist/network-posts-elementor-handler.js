@@ -342,11 +342,45 @@
 	};
 
 	// Initialize on Elementor frontend
-	$(window).on('elementor/frontend/init', function() {
-		elementorFrontend.hooks.addAction(
-			'frontend/element_ready/network_posts_widget.default',
-			NetworkPostsHandler
-		);
+	if (typeof elementorFrontend !== 'undefined') {
+		$(window).on('elementor/frontend/init', function() {
+			elementorFrontend.hooks.addAction(
+				'frontend/element_ready/network_posts_widget.default',
+				NetworkPostsHandler
+			);
+		});
+	}
+
+	// Initialize for regular shortcode usage (non-Elementor) and fallback for Elementor
+	$(document).ready(function() {
+		// Wait a bit for Elementor to initialize
+		setTimeout(function() {
+			// Find all network posts containers
+			$('.elementor-posts-masonry, .elementor-grid').each(function() {
+				var $grid = $(this);
+				var $widget = $grid.closest('.elementor-widget-network_posts_widget');
+
+				// For Elementor widgets, use the widget as scope
+				if ($widget.length > 0) {
+					// Check if already initialized
+					if (!$widget.data('netsposts-initialized')) {
+						$widget.data('netsposts-initialized', true);
+						NetworkPostsHandler($widget);
+					}
+				}
+				// For shortcode usage
+				else {
+					var $scope = $grid.closest('.netsposts-items').parent();
+					if (!$scope.hasClass('elementor-widget')) {
+						$scope.addClass('netsposts-shortcode-wrapper');
+					}
+					if (!$scope.data('netsposts-initialized')) {
+						$scope.data('netsposts-initialized', true);
+						NetworkPostsHandler($scope);
+					}
+				}
+			});
+		}, 100);
 	});
 
 })(jQuery);

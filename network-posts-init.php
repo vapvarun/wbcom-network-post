@@ -57,6 +57,9 @@ function netsposts_add_network_settings() {
 function netsposts_add_js(){
 	wp_enqueue_script( 'netsposts-js', plugins_url( 'dist/netsposts-public.js', __FILE__ ), array( 'jquery' ), '1.0.2', true );
 
+	// Enqueue Masonry handler for shortcode usage
+	wp_enqueue_script( 'network-posts-elementor-handler', plugins_url( 'dist/network-posts-elementor-handler.js', __FILE__ ), array( 'jquery' ), '1.0.2', true );
+
 	// Localize script for AJAX
 	wp_localize_script( 'netsposts-js', 'netspostsAjax', array(
 		'ajax_url' => admin_url( 'admin-ajax.php' ),
