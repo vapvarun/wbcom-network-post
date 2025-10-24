@@ -1,337 +1,261 @@
 # Network Posts Extended
 
-**Contributors:** wbcomdesigns
-**Donate link:** https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VBR3DEUQ5XVMU
-**Tags:** network global posts, network posts, global posts, multisite posts, shared posts, display multisite posts
-**Requires at least:** 5.7.1
-**Tested up to:** 6.2
-**Stable tag:** 2.0.0
-**Requires PHP:** 7.2+
-**Compatible with PHP:** 8.3+
-**License:** GPLv2 or later
-**License URI:** https://www.gnu.org/licenses/gpl-2.0.html
+[![WordPress](https://img.shields.io/badge/WordPress-5.7.1+-blue.svg)](https://wordpress.org)
+[![PHP](https://img.shields.io/badge/PHP-7.2+-purple.svg)](https://php.net)
+[![License](https://img.shields.io/badge/License-GPL%20v2+-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
-A WordPress multisite plugin to share posts, pages, and custom post types from across the entire network on any site.
+A powerful WordPress Multisite plugin that allows you to display posts, pages, and custom post types from across your entire network on any site. Features Elementor integration, advanced filtering, and flexible layouts including Masonry grid support.
 
 ---
 
-## Description
+## 🚀 Features
 
-The **Network Posts Extended** plugin allows you to list posts, pages, and custom post types from across your entire WordPress multisite network on any page, for any subdomain, or the main blog.
-
-### Key Features
-
-- ✅ Display posts from all sites or specific sites in your network
-- ✅ List posts from any blog on any other blog in the network
-- ✅ Support for custom post types (including WooCommerce products)
-- ✅ Pagination support with customizable styling
-- ✅ Filter by categories, tags, and custom taxonomies
-- ✅ Display prices for WooCommerce and eStore products
-- ✅ Custom excerpt length (by words or characters)
-- ✅ Full post content display option
-- ✅ Random post display
-- ✅ Custom ordering (by date, title, or custom fields)
-- ✅ Advanced Custom Fields (ACF) support
-- ✅ Multiple layout options (default and inline)
-- ✅ Elementor widget integration
-- ✅ WordPress widget support
-- ✅ Custom image sizes and thumbnail management
-- ✅ Responsive design ready
-- ✅ PHP 8.3+ compatible
+- **Network-Wide Content Sharing** - Display posts from any site across your multisite network
+- **Elementor Widget** - Drag-and-drop widget with visual controls and live preview
+- **Masonry Layout** - Beautiful responsive grid with automatic height calculations
+- **Advanced Filtering** - Filter by site, post type, category, tag, or custom taxonomy
+- **WooCommerce Support** - Display products with pricing from WooCommerce or eStore
+- **Custom Post Types** - Full support for any custom post type
+- **Flexible Layouts** - Default, inline, and custom layout options
+- **Responsive Design** - Mobile-first design with customizable breakpoints
+- **Load More Pagination** - AJAX-powered infinite scroll and load more button
+- **Image Management** - Custom thumbnail sizes with automatic resizing
+- **ACF Integration** - Display and order by Advanced Custom Fields
+- **PHP 8.3+ Compatible** - Modern, optimized codebase
 
 ---
 
-## Installation
-
-### Method 1: FTP Upload
-1. Download and unzip the plugin file
-2. Upload the `wbcom-network-post` folder to `/wp-content/plugins/`
-3. Activate the plugin through the 'Plugins' menu in WordPress
-
-### Method 2: WordPress Admin
-1. Go to Plugins → Add New
-2. Search for "Network Posts Extended"
-3. Click "Install Now" then "Activate"
-
-### Method 3: Direct Upload
-1. Go to Plugins → Add New → Upload Plugin
-2. Choose the downloaded zip file
-3. Click "Install Now" then "Activate"
-
----
-
-## Basic Usage
-
-### Shortcode
-
-Add the shortcode to any page or post:
-
-```
-[netsposts]
-```
-
-### Common Examples
-
-```php
-// Show only pages from all sites
-[netsposts post_type='page']
-
-// Show posts from specific sites (IDs 3 and 11)
-[netsposts include_blog='3,11']
-
-// Show WooCommerce products with prices
-[netsposts post_type='product' include_price='woocommerce']
-
-// Show 10 random posts
-[netsposts random='true' list='10']
-
-// Show posts from specific category
-[netsposts taxonomy='news,sports']
-
-// Show posts in 3 columns
-[netsposts columns='3']
-
-// Use inline layout
-[netsposts use_layout='inline']
-```
-
-### Elementor Widget
-
-The plugin includes an Elementor widget with visual controls for:
-- Column count (responsive)
-- Masonry layout
-- Image settings
-- Typography
-- Spacing
-- And more...
-
----
-
-## Frequently Asked Questions
-
-### Why is the plugin only pulling posts from the main blog?
-
-**Two possible reasons:**
-
-1. **You have `include_blog='1'` in the shortcode** – Remove this to show all blogs
-2. **Other blogs are not set as public** – Go to Network Admin → Sites → Edit (any subsite) and make sure the "Public" checkbox is checked. Private, spam, or archived sites won't be displayed.
-
-### Should I network activate the plugin?
-
-You can either:
-- **Network activate** – Available on all sites with network-wide settings
-- **Activate individually** – Only on specific sites
-
-When network activated, you'll have access to **Network Posts Thumbnails** settings under Settings in Network Admin, allowing you to control thumbnail permissions across the network.
-
-### Can I show only specific posts?
-
-Yes! Use the `include_post` parameter:
-
-```
-[netsposts include_post='5,78,896']
-```
-
-### How do I shorten long titles?
-
-Use the `title_length` parameter to limit characters:
-
-```
-[netsposts title_length='50']
-```
-
-### Can I order posts by a custom field?
-
-Yes, with ACF support:
-
-```
-[netsposts order_by_acf='last_name asc']
-```
-
-### Does it work with WooCommerce?
-
-Yes! Display WooCommerce products with prices:
-
-```
-[netsposts post_type='product' include_price='woocommerce']
-```
-
-Also compatible with **eStore** plugin.
-
-### Can I use it in widgets?
-
-Yes! Use the standard WordPress Text widget or the included Network Posts widget. The plugin also provides an Elementor widget.
-
-### Will this work on a single site installation?
-
-No, this plugin requires WordPress Multisite. For single sites, check out the [Single Site Posts Extended](https://agaveplugins.com/plugins/) version.
-
-### How do I use custom layouts?
-
-The plugin includes two default layouts:
-
-```
-[netsposts use_layout='default']  // Default layout
-[netsposts use_layout='inline']   // Inline layout (thumbnail + text side-by-side)
-```
-
-You can also add custom CSS to style the output.
-
----
-
-## Configuration
-
-### Network Settings (Network Admin)
-
-Go to **Network Admin → Settings → Network Posts Thumbnails** to:
-- Allow/restrict thumbnail resizing per blog
-- Set global or per-blog thumbnail sizes
-- Manage image resizing permissions
-
-### Blog Settings
-
-Go to **Settings → Network Posts** on any site to:
-- Configure excerpt tag stripping
-- Set up custom thumbnail sizes
-- Manage blog-specific options
-
----
-
-## Shortcode Parameters
-
-For a complete list of all shortcode parameters and examples, visit:
-
-👉 [https://agaveplugins.com/tutorials/plugins/multisite/network-posts-extended/](https://agaveplugins.com/tutorials/plugins/multisite/network-posts-extended/)
-
-### Most Common Parameters
-
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `include_blog` | Specific blog IDs to include | `include_blog='1,3,5'` |
-| `exclude_blog` | Specific blog IDs to exclude | `exclude_blog='2,4'` |
-| `post_type` | Post type to display | `post_type='page'` |
-| `taxonomy` | Filter by category/tag | `taxonomy='news,sports'` |
-| `list` | Number of posts to show | `list='10'` |
-| `columns` | Number of columns | `columns='3'` |
-| `random` | Show random posts | `random='true'` |
-| `thumbnail` | Show featured images | `thumbnail='true'` |
-| `size` | Image size | `size='300,200'` |
-| `excerpt_length` | Excerpt word limit | `excerpt_length='20'` |
-| `full_text` | Show full content | `full_text='true'` |
-| `paginate` | Enable pagination | `paginate='true'` |
-| `use_layout` | Layout type | `use_layout='inline'` |
-
----
-
-## Advanced Features
-
-### Custom Post Types
-
-```
-[netsposts post_type='books']
-```
-
-### ACF Integration
-
-Display ACF fields:
-
-```
-[netsposts include_acf_fields='author,publisher,year']
-```
-
-Order by ACF field:
-
-```
-[netsposts order_by_acf='event_date asc']
-```
-
-### Category Offset
-
-Skip recent posts in specific categories:
-
-```
-[netsposts taxonomy_offset_names='books,flowers,sports' taxonomy_offsets='5,4,10']
-```
-
-### Dynamic AJAX Pagination
-
-Enable dynamic loading without page refresh:
-
-```
-[netsposts paginate='true' load_posts_dynamically='true']
-```
-
-### Custom Title Links
-
-Add a heading with link:
-
-```
-[netsposts main_title='Latest Blog Posts' main_title_link='https://example.com/all-posts/']
-```
-
----
-
-## Technical Requirements
+## 📋 Requirements
 
 - **WordPress:** 5.7.1 or higher
 - **PHP:** 7.2 or higher (tested up to PHP 8.3)
-- **Environment:** WordPress Multisite installation
+- **Environment:** WordPress Multisite installation (subdirectory or subdomain)
 - **Optional:** Elementor (for widget support)
 - **Optional:** Advanced Custom Fields (for ACF integration)
 - **Optional:** WooCommerce or eStore (for product pricing)
 
 ---
 
-## Changelog
+## 📦 Installation
 
-### 2.0.0
-- Fixed Masonry layout not loading on frontend
-- Added fallback initialization for Elementor widgets
-- Added Grunt build system for distribution packages
-- Improved JavaScript loading and initialization
-- Enhanced build process with automated zip creation
+### Method 1: WordPress Admin (Recommended)
 
-### 1.0.0
-- Initial release
-- PHP 8.3+ compatibility
-- Modernized Elementor widget (compatible with Elementor 3.5+)
-- Fixed Masonry layout issues
-- Improved JavaScript performance
-- Enhanced security (removed eval() usage)
-- Added comprehensive error handling
-- Optimized CSS and JavaScript loading
-- Added proper asset versioning
-- Full WordPress Coding Standards compliance
+1. Go to **Plugins** → **Add New**
+2. Search for "Network Posts Extended"
+3. Click **Install Now** then **Activate**
 
-### 7.3.8
-- Legacy version
+### Method 2: Manual Upload
+
+1. Download the plugin zip file
+2. Go to **Plugins** → **Add New** → **Upload Plugin**
+3. Choose the zip file and click **Install Now**
+4. Click **Activate**
+
+### Method 3: FTP/SFTP
+
+1. Download and unzip the plugin
+2. Upload the `wbcom-network-post` folder to `/wp-content/plugins/`
+3. Activate through the **Plugins** menu in WordPress
+
+### Network Activation
+
+You can either:
+- **Network activate** - Available on all sites with network-wide settings
+- **Activate individually** - Only on specific sites where needed
 
 ---
 
-## Development
+## 🎯 Quick Start
 
-### Code Standards
+### Basic Shortcode
 
-- ✅ WordPress Coding Standards compliant
-- ✅ PHP 8.3+ compatible
-- ✅ PSR-4 autoloading
-- ✅ Namespaced code (`NetworkPosts\Components\*`)
-- ✅ Full PHPDoc documentation
-- ✅ Security best practices (escaping, sanitization, nonce verification)
+Display posts from all public sites in your network:
+
+```php
+[netsposts]
+```
+
+### Common Examples
+
+```php
+// Show 10 posts in 3 columns with masonry layout
+[netsposts list="10" columns="3"]
+
+// Show posts from specific sites (IDs 1, 3, and 5)
+[netsposts include_blog="1,3,5"]
+
+// Show WooCommerce products with prices
+[netsposts post_type="product" include_price="woocommerce"]
+
+// Show pages instead of posts
+[netsposts post_type="page"]
+
+// Show posts from specific categories
+[netsposts taxonomy="news,sports"]
+
+// Show random posts
+[netsposts random="true" list="10"]
+
+// Show posts with custom excerpt length
+[netsposts excerpt_length="30"]
+```
+
+### Using the Elementor Widget
+
+1. Edit any page with Elementor
+2. Search for **"Network Posts"** widget
+3. Drag it onto your page
+4. Configure options in the sidebar:
+   - Layout (columns, masonry)
+   - Query filters (sites, categories)
+   - Display options (image, excerpt, read more)
+   - Styling (colors, typography, spacing)
+5. Click **Update** to save
+
+---
+
+## 📖 Documentation
+
+### Shortcode Parameters
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `include_blog` | Specific blog IDs to include | `include_blog="1,3,5"` |
+| `exclude_blog` | Specific blog IDs to exclude | `exclude_blog="2,4"` |
+| `post_type` | Post type to display | `post_type="page"` |
+| `taxonomy` | Filter by category/tag | `taxonomy="news,sports"` |
+| `exclude_taxonomy` | Exclude categories/tags | `exclude_taxonomy="draft"` |
+| `list` | Number of posts per page | `list="10"` |
+| `columns` | Number of columns | `columns="3"` |
+| `random` | Show random posts | `random="true"` |
+| `thumbnail` | Show featured images | `thumbnail="true"` |
+| `size` | Image size (name or dimensions) | `size="medium"` or `size="300,200"` |
+| `excerpt_length` | Excerpt word limit | `excerpt_length="20"` |
+| `title_length` | Title character limit | `title_length="50"` |
+| `full_text` | Show full content | `full_text="true"` |
+| `show_excerpt` | Show/hide excerpt | `show_excerpt="false"` |
+| `paginate` | Enable pagination | `paginate="true"` |
+| `use_layout` | Layout type | `use_layout="inline"` |
+| `read_more_text` | Custom read more text | `read_more_text="Continue Reading"` |
+| `order_post_by` | Order by date/title | `order_post_by="date_order desc"` |
+| `include_price` | Show product prices | `include_price="woocommerce"` |
+
+---
+
+## 🎨 Layouts
+
+### Default Layout
+Standard vertical layout with image on top, title, meta, excerpt, and read more link.
+
+### Inline Layout
+Horizontal layout with thumbnail and content side-by-side:
+```php
+[netsposts use_layout="inline"]
+```
+
+### Masonry Layout (Elementor Only)
+Dynamic grid with varied heights - enable via Elementor widget settings.
+
+---
+
+## 🔧 Configuration
+
+### Network Settings
+
+Go to **Network Admin** → **Settings** → **Network Posts Thumbnails**:
+- Allow/restrict thumbnail resizing per blog
+- Set global or per-blog thumbnail sizes
+- Manage image resizing permissions
+
+### Blog Settings
+
+Go to **Settings** → **Network Posts** on any site:
+- Configure excerpt tag stripping
+- Set up custom thumbnail sizes
+- Manage blog-specific options
+
+---
+
+## 💻 Advanced Usage
+
+### Custom Post Types
+
+```php
+[netsposts post_type="books"]
+```
+
+### ACF Integration
+
+Display ACF fields:
+```php
+[netsposts include_acf_fields="author,publisher,year"]
+```
+
+Order by ACF field:
+```php
+[netsposts order_by_acf="event_date asc"]
+```
+
+### Category Offset
+
+Skip recent posts in specific categories:
+```php
+[netsposts taxonomy_offset_names="books,flowers,sports" taxonomy_offsets="5,4,10"]
+```
+
+### Dynamic AJAX Pagination
+
+Enable dynamic loading without page refresh:
+```php
+[netsposts paginate="true" load_posts_dynamically="true"]
+```
+
+### Custom Title Links
+
+Add a heading with link:
+```php
+[netsposts main_title="Latest Blog Posts" main_title_link="https://example.com/all-posts/"]
+```
+
+### WooCommerce Products
+
+Display products with prices:
+```php
+[netsposts post_type="product" include_price="woocommerce" taxonomy="featured"]
+```
+
+---
+
+## 🛠️ Development
 
 ### Architecture
 
 ```
 wbcom-network-post/
-├── components/          # Core functionality (PSR-4 autoloaded)
-│   ├── db/             # Database query builders
-│   ├── settings/       # Admin settings pages
-│   └── resizer/        # Image resizing system
-├── views/              # Template files
-├── dist/               # Compiled JavaScript
-├── css/                # Stylesheets
-└── language/           # Translation files
+├── components/             # Core functionality (PSR-4 autoloaded)
+│   ├── db/                # Database query builders
+│   │   ├── category/      # Category filtering
+│   │   └── NetsPostsQuery.php
+│   ├── settings/          # Admin settings pages
+│   └── resizer/           # Image resizing system
+├── views/                 # Template files
+│   └── post/              # Post display templates
+├── dist/                  # Compiled JavaScript
+├── css/                   # Stylesheets
+├── language/              # Translation files (i18n)
+└── network-posts-extended.php  # Main plugin file
 ```
+
+### Code Standards
+
+- ✅ WordPress Coding Standards compliant
+- ✅ PHP 8.3+ compatible
+- ✅ PSR-4 autoloading with namespaces
+- ✅ Namespaced code (`NetworkPosts\Components\*`)
+- ✅ Full PHPDoc documentation
+- ✅ Security best practices (escaping, sanitization, nonce verification)
+- ✅ Modern JavaScript (ES6+)
+- ✅ No eval() or unsafe code patterns
 
 ### Build System
 
@@ -339,8 +263,7 @@ This plugin uses **Grunt** to create distribution packages for release.
 
 #### Setup
 
-1. Install Node.js and npm (if not already installed)
-2. Install dependencies:
+Install Node.js and npm, then run:
 
 ```bash
 npm install
@@ -349,7 +272,7 @@ npm install
 #### Build Commands
 
 ```bash
-# Create distribution zip file (default task)
+# Create distribution zip file (most common)
 npm run zip
 
 # Build files only (without creating zip)
@@ -359,36 +282,137 @@ npm run build
 npm run clean
 ```
 
-The distribution zip file will be created in the `release/` folder with the naming format:
+#### Build Output
+
+The distribution zip file will be created at:
 ```
 release/wbcom-network-post-v2.0.0.zip
 ```
 
-#### What Gets Included
+#### What Gets Included/Excluded
 
-The build process automatically excludes development files:
+**Included:**
+- ✅ All PHP files (plugin core)
+- ✅ JavaScript and CSS assets
+- ✅ Template files (`views/`)
+- ✅ Translation files (`language/`)
+- ✅ Documentation (`readme.txt`)
+
+**Excluded:**
 - ❌ `node_modules/`
 - ❌ `build/` and `release/` directories
 - ❌ `.git/` repository files
-- ❌ Build configuration files (`package.json`, `Gruntfile.js`)
-- ❌ IDE configuration files
+- ❌ Build configuration (`package.json`, `Gruntfile.js`)
+- ❌ IDE configuration files (`.vscode/`, `.idea/`)
 - ❌ Log files and temporary files
 
-All plugin files (PHP, JavaScript, CSS, images, translations) are included in the distribution package.
+---
+
+## ❓ FAQ
+
+### Why is the plugin only showing posts from the main blog?
+
+**Two possible reasons:**
+
+1. **You have `include_blog='1'` in the shortcode** - Remove this to show posts from all sites
+2. **Other sites are not set as public** - Go to **Network Admin** → **Sites** → **Edit** (any subsite) and make sure the "Public" checkbox is checked. Private, spam, archived, or deleted sites won't be displayed.
+
+### Should I network activate the plugin?
+
+You can do either:
+- **Network activate** - Available on all sites with network-wide settings
+- **Activate individually** - Only on specific sites
+
+When network activated, you'll have access to **Network Posts Thumbnails** settings in Network Admin for managing thumbnail permissions across the network.
+
+### Can I show only specific posts?
+
+Yes! Use the `include_post` parameter:
+```php
+[netsposts include_post="5,78,896"]
+```
+
+### How do I shorten long titles?
+
+Use the `title_length` parameter to limit characters:
+```php
+[netsposts title_length="50"]
+```
+
+### Can I order posts by a custom field?
+
+Yes, with ACF support:
+```php
+[netsposts order_by_acf="last_name asc"]
+```
+
+### Does it work with WooCommerce?
+
+Yes! Display WooCommerce products with prices:
+```php
+[netsposts post_type="product" include_price="woocommerce"]
+```
+
+Also compatible with **eStore** plugin.
+
+### Will this work on a single site installation?
+
+No, this plugin requires WordPress Multisite.
+
+### How do I customize the output styling?
+
+You can add custom CSS targeting these classes:
+- `.netsposts-items` - Container
+- `.netsposts-content` - Individual post card
+- `.elementor-post__thumbnail` - Featured image
+- `.elementor-post__title` - Post title
+- `.elementor-post__excerpt` - Post excerpt
+- `.netsposts-read-more-link` - Read more link
 
 ---
 
-## Support & Documentation
+## 📝 Changelog
 
-- **Documentation:** [https://agaveplugins.com/tutorials/plugins/multisite/network-posts-extended/](https://agaveplugins.com/tutorials/plugins/multisite/network-posts-extended/)
-- **Support:** [https://wbcomdesigns.com/](https://wbcomdesigns.com/)
-- **Author:** Wbcom Designs
+### 2.0.0 - 2025-10-24
+- **Fixed:** Masonry layout not loading on frontend
+- **Added:** Fallback initialization for Elementor widgets
+- **Added:** Grunt build system for distribution packages
+- **Improved:** JavaScript loading and initialization reliability
+- **Enhanced:** Build process with automated zip creation
+- **Updated:** Version management across all files
+
+### 1.0.0 - 2025-10-22
+- **Initial Release:** Complete rewrite and modernization
+- **Added:** PHP 8.3+ compatibility
+- **Added:** Modernized Elementor widget (compatible with Elementor 3.5+)
+- **Fixed:** Masonry layout calculation issues
+- **Improved:** JavaScript performance and loading
+- **Enhanced:** Security (removed eval() usage, added nonce verification)
+- **Added:** Comprehensive error handling
+- **Optimized:** CSS and JavaScript loading
+- **Added:** Proper asset versioning
+- **Compliance:** Full WordPress Coding Standards
+
+### 7.3.8
+- Legacy version (prior to rewrite)
 
 ---
 
-## License
+## 🤝 Support & Contributing
 
-This plugin is licensed under the GPL v2 or later.
+### Support
+
+🆘 **Get Help:** [https://wbcomdesigns.com/](https://wbcomdesigns.com/)
+
+### Contributing
+
+Contributions are welcome! Please ensure your code follows WordPress Coding Standards.
+
+---
+
+## 📄 License
+
+This plugin is licensed under the **GPL v2 or later**.
 
 ```
 This program is free software; you can redistribute it and/or modify
@@ -402,24 +426,25 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 ```
 
----
-
-## Credits
-
-Developed by **Wbcom Designs**
-Visit: [https://wbcomdesigns.com/](https://wbcomdesigns.com/)
+**Full License:** [https://www.gnu.org/licenses/gpl-2.0.html](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ---
 
-## Screenshots
+## 👥 Credits
 
-1. **Inline Layout** - Using `use_layout='inline'` for side-by-side thumbnail and content
-2. **Custom Thumbnails** - Custom thumbnail sizes via `size='custom-thumbnail-size'`
-3. **Multi-column Display** - Multiple columns with responsive CSS
-4. **Image Resizing** - Admin interface for custom image sizes and thumbnail regeneration
-5. **Elementor Widget** - Visual widget builder with live preview
-6. **Masonry Layout** - Dynamic masonry grid layout with Elementor
+**Developed by:** [Wbcom Designs](https://wbcomdesigns.com/)
+**Maintained by:** Varun Kumar Dubey
 
 ---
 
-**⭐ If you find this plugin helpful, please consider leaving a review!**
+## ⭐ Support This Project
+
+If you find this plugin helpful, please:
+- ⭐ Star this repository
+- 📝 Leave a review on WordPress.org
+- 🐛 Report issues or suggest features
+- 💝 [Consider donating](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VBR3DEUQ5XVMU)
+
+---
+
+**Made with ❤️ for the WordPress Multisite community**
